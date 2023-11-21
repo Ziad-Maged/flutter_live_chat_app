@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "131085967013",
+    "project_id": "flutter-live-chat-app",
+    "storage_bucket": "flutter-live-chat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131085967013:android:841f40998e9aaefce7374c",
+        "android_client_info": {
+          "package_name": "com.asdc.flutter_live_chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw_z7flLE0Ar8nq0xSxPPbpGVwW4R_TF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131085967013:android:818d77636b0a5438e7374c",
+        "android_client_info": {
+          "package_name": "com.example.flutter_live_chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw_z7flLE0Ar8nq0xSxPPbpGVwW4R_TF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
