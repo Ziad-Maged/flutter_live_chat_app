@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_live_chat_app/pages/user_profile_page.dart';
@@ -153,7 +151,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       setState(() {
         messages.add(newMessage);
       });
-      print("Messages: ${messages}");
       await FirebaseFirestore.instance.collection('chatroom').doc(widget.chatRoomID).update({
         'messages': FieldValue.arrayUnion([newMessage])
       });
