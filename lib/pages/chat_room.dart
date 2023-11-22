@@ -92,7 +92,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    reverse: true,
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       Map<String, dynamic> map = messages[index];
