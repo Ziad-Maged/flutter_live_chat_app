@@ -44,7 +44,39 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          verticalDirection: VerticalDirection.up,
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _textFormController,
+                    decoration: InputDecoration(
+                      hintText: "message",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide()
+                      )
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 5,),
+                CircleAvatar(
+                  backgroundColor: Colors.purple,
+                  radius: 20,
+                  child: IconButton(
+                    onPressed: sendText,
+                    icon: const Icon(
+                      Icons.send,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance.collection('chatroom').doc(widget.chatRoomID).snapshots(),
@@ -60,6 +92,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
+                    reverse: true,
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       Map<String, dynamic> map = messages[index];
@@ -104,37 +137,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 },
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _textFormController,
-                    decoration: InputDecoration(
-                      hintText: "message",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30)
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide()
-                      )
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 5,),
-                CircleAvatar(
-                  backgroundColor: Colors.purple,
-                  radius: 20,
-                  child: IconButton(
-                    onPressed: sendText,
-                    icon: const Icon(
-                      Icons.send,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
-            )
           ],
         ),
       ),
