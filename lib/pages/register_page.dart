@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -147,6 +150,40 @@ class _RegistrationPageState extends State<RegistrationPage> {
       'mobilePhone': mobilePhone
     };
     await docUser.set(jsonData);
+    requestPermissions();
+    getToken();
+  }
+
+  void requestPermissions() async{
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true
+    );
+    if(settings.authorizationStatus == AuthorizationStatus.authorized){
+      log("User has granted permission");
+    }else if(settings.authorizationStatus == AuthorizationStatus.provisional){
+      log("User granted provisional permission");
+    }else {
+      log("User declined permission");
+    }
+  }
+
+  void getToken() async{
+    await FirebaseMessaging.instance.getToken().then((token){
+      log("The token for this device is $token");
+      saveToken(token!);
+    });
+  }
+
+  void saveToken(String token) async{
+    await FirebaseFirestore.instance.collection('userTokens').doc(_usernameController.text).set({
+      'token': token
+    });
   }
 
   Future<void> _selectDate() async{
