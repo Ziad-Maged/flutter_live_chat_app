@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_live_chat_app/pages/user_profile_page.dart';
+import 'package:http/http.dart' as http;
 
 class ChatRoomPage extends StatefulWidget {
   final Map<String, dynamic> frontUserInfo;
@@ -155,7 +158,49 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       await FirebaseFirestore.instance.collection('chatroom').doc(widget.chatRoomID).update({
         'messages': FieldValue.arrayUnion([newMessage])
       });
+      final snap = await FirebaseFirestore.instance.collection('userTokens').doc(widget.endUserInfo['username']).get();
+      String token = snap['token'];
+      sendPushMessage(token);
       _textFormController.clear();
+    }
+  }
+
+  void sendPushMessage(String token) async{
+    try{
+      final jsonData = {
+        'body' : _textFormController.text,
+        'deletedReceiver' : false,
+        'deletedSender' : false,
+        'receiverID' : widget.endUserInfo['username'],
+        'senderID' : widget.frontUserInfo['username'],
+        'title' : 'You received a message from ${widget.frontUserInfo['username']}'
+      };
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type' : 'application/json',
+          'Authorization' : 'key=AAAAHoVVHqU:APA91bF1yzbBbQzJYlpgP8XK5GwdINFYdE1iBm1mT9pLzphh53K2ihhQwkeJ3T6QcYi3tFYMJWXSUGOVnlolRpXRIgfkJbzrHTZAusghM1uKf_2Mm1wIjbTplcuFeAJfcyHrTw18D40I'
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'priority' : 'high',
+            'data' : <String, dynamic>{
+              'click_action' : 'FLUTTER_NOTIFICATION_CLICK',
+              'status' : 'done',
+              'body' : _textFormController.text,
+              'title' : 'You received a message from ${widget.frontUserInfo['username']}'
+            },
+            'notification' : <String, dynamic>{
+              'title' : 'You received a message from ${widget.frontUserInfo['username']}',
+              'body' : _textFormController.text,
+            },
+            'to' : token
+          }
+        )
+      );
+      await FirebaseFirestore.instance.collection('notifications').doc().set(jsonData);
+    }catch(error){
+      log("Came Here With Error: $error");
     }
   }
 
