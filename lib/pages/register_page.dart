@@ -23,6 +23,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   bool ageError = false;
   bool dateOfBirthError = false;
   bool mobilePhoneError = false;
+
+  @override
+  void initState(){
+    super.initState();
+    requestPermissions();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,7 +157,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
       'mobilePhone': mobilePhone
     };
     await docUser.set(jsonData);
-    requestPermissions();
     getToken();
   }
 

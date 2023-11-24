@@ -158,9 +158,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       await FirebaseFirestore.instance.collection('chatroom').doc(widget.chatRoomID).update({
         'messages': FieldValue.arrayUnion([newMessage])
       });
-      final snap = await FirebaseFirestore.instance.collection('userTokens').doc(widget.endUserInfo['username']).get();
+      final snap = await FirebaseFirestore.instance.collection('userTokens').doc(widget.frontUserInfo['username']).get();
       String token = snap['token'];
       sendPushMessage(token);
+      log("Sent Note to $token");
       _textFormController.clear();
     }
   }
@@ -193,6 +194,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             'notification' : <String, dynamic>{
               'title' : 'You received a message from ${widget.frontUserInfo['username']}',
               'body' : _textFormController.text,
+              'android_channel_id' : 'dbfood'
             },
             'to' : token
           }
