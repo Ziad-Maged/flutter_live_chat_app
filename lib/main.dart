@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_live_chat_app/pages/login_page.dart';
 
 Future<dynamic> myBackgroundHandler(RemoteMessage remoteMessage) async{
-  print("on Background Message: ${remoteMessage.notification?.title}/${remoteMessage.notification?.body}");
+  log("on Background Message: ${remoteMessage.notification?.title}/${remoteMessage.notification?.body}");
 }
 
 void main() async{
