@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +30,13 @@ class _ViewNotificationsPageState extends State<ViewNotificationsPage> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: () async{
+                      QuerySnapshot querySnapshots = await FirebaseFirestore.instance.collection('notifications').where('receiverID', isEqualTo: widget.userInfo['username']).get();
+                      for(QueryDocumentSnapshot document in querySnapshots.docs){
+                        await FirebaseFirestore.instance.collection('notifications').doc(document.id).delete();
+                      }
+                      log('Deleted All Documents');
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       padding: const EdgeInsets.all(12.0),
@@ -39,7 +47,7 @@ class _ViewNotificationsPageState extends State<ViewNotificationsPage> {
               ],
             )];
             final validNotifications = notifications!.map((e) {
-              if((e['senderID'] == widget.userInfo['username'] && !e['deletedSender']) || (e['receiverID'] == widget.userInfo['username'] && !e['deletedReceiver'])){
+              if((e['receiverID'] == widget.userInfo['username'] && !e['deletedReceiver'])){
                 return Row(
                   children: [
                     Text(
@@ -50,7 +58,9 @@ class _ViewNotificationsPageState extends State<ViewNotificationsPage> {
                       backgroundColor: Colors.redAccent,
                       child: IconButton(
                         icon: const Icon(Icons.delete),
-                        onPressed: (){},
+                        onPressed: () async{
+                          await FirebaseFirestore.instance.collection('notifications').doc(e['id']).delete();
+                        },
                       ),
                     )
                   ],
