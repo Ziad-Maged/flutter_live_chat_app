@@ -1,8 +1,17 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_live_chat_app/Helpers/HelperNotification.dart';
 import 'package:flutter_live_chat_app/pages/login_page.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+Future<dynamic> myBackgroundHandler(RemoteMessage remoteMessage) async{
+  log("on Background Message: ${remoteMessage.notification?.title}/${remoteMessage.notification?.body}");
+}
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -16,6 +25,14 @@ void main() async{
         )
       )
   :await Firebase.initializeApp();
+
+  try{
+    final RemoteMessage? remoteMessage = await FirebaseMessaging.instance.getInitialMessage();
+    await HelperNotification.initialize(flutterLocalNotificationsPlugin);
+    FirebaseMessaging.onBackgroundMessage(myBackgroundHandler);
+  }catch(error){
+    //Ignored
+  }
   runApp(const MyApp());
 }
 
