@@ -200,6 +200,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           }
         )
       );
+      log("Pushed A Message");
       await FirebaseFirestore.instance.collection('notifications').doc().set(jsonData);
     }catch(error){
       log("Came Here With Error: $error");
