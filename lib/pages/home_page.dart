@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_live_chat_app/pages/chat_room.dart';
+import 'package:flutter_live_chat_app/pages/send_notification_page.dart';
 import 'package:flutter_live_chat_app/pages/view_notification_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,7 +40,13 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: const Text("Push Notifications To User"),
               onTap: (){
-                //TODO
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => SendNotificationsPage(
+                        userInfo: widget.userInfo,
+                      )
+                  )
+                );
               },
             ),
           ],

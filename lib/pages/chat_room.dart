@@ -158,7 +158,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       await FirebaseFirestore.instance.collection('chatroom').doc(widget.chatRoomID).update({
         'messages': FieldValue.arrayUnion([newMessage])
       });
-      final snap = await FirebaseFirestore.instance.collection('userTokens').doc(widget.frontUserInfo['username']).get();
+      final snap = await FirebaseFirestore.instance.collection('userTokens').doc(widget.endUserInfo['username']).get();
       String token = snap['token'];
       sendPushMessage(token);
       log("Sent Note to $token");
